@@ -100,7 +100,7 @@
         android:layout_marginTop="@dimen/common_spacing"
         app:layout_constraintStart_toEndOf="@id/favorite"
         app:layout_constraintTop_toBottomOf="@id/barrier2"
-        tools:text="10" />
+        tools:text="@sample/posts.json/data/favorite" />
 
     <ImageView
         android:id="@+id/share"
@@ -121,7 +121,7 @@
         android:layout_marginTop="@dimen/common_spacing"
         app:layout_constraintStart_toEndOf="@id/share"
         app:layout_constraintTop_toBottomOf="@id/barrier2"
-        tools:text="5" />
+        tools:text="@sample/posts.json/data/share" />
 
     <ImageView
         android:id="@+id/visibility"
@@ -141,6 +141,6 @@
         android:layout_marginTop="@dimen/common_spacing"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/barrier2"
-        tools:text="5" />
+        tools:text="@sample/posts.json/data/visibility" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
