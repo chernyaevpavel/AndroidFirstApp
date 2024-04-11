@@ -6,4 +6,10 @@
     <string name="description_visibility_button">Number of views</string>
     <string name="description_favorite_button">Number of likes</string>
     <string name="description_share_button">Number of share</string>
+    <string name="menu_remove">Delete</string>
+    <string name="menu_edit">Edit</string>
+    <string name="post_text">Save</string>
+    <string name="description_post_save">Save</string>
+    <string name="not_empty_content">"Content can't be empty"</string>
+    <string name="edit_message">Edit message</string>
 </resources>
