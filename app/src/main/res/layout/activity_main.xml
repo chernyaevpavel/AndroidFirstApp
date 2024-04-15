@@ -96,16 +96,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/toolsCenter" />
 
-    <ImageButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/common_spacing"
-        android:background="@android:color/transparent"
         android:contentDescription="@string/description_post_save"
-        android:src="@drawable/baseline_check_circle_outline_48"
+        app:srcCompat="@drawable/baseline_check_circle_outline_48"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:scaleType="center"
         app:layout_constraintStart_toEndOf="@id/content" />
 
     <androidx.constraintlayout.widget.Group

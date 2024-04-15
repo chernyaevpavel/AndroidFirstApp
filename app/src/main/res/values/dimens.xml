@@ -7,4 +7,5 @@
     <dimen name="image_button_size">48dp</dimen>
     <dimen name="small_margin_top">4dp</dimen>
     <dimen name="line_height">1dp</dimen>
+    <dimen name="icon_padding">4dp</dimen>
 </resources>
