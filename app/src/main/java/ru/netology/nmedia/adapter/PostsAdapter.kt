@@ -44,6 +44,8 @@ class PostViewHolder(
             published.text = post.published
             if (post.urlVideo != null) {
                 videoGroup.visibility = View.VISIBLE
+            } else {
+                videoGroup.visibility = View.GONE
             }
             content.text = post.content
             like.isChecked = post.likedByMe

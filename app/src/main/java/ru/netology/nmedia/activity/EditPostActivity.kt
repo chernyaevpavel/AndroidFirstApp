@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.Intent.EXTRA_TEXT
 import android.os.Bundle
 import android.view.View
-import android.widget.EditText
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.appcompat.app.AppCompatActivity
 import ru.netology.nmedia.databinding.ActivityEditPostBinding
