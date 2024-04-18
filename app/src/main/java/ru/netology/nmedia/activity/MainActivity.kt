@@ -1,17 +1,12 @@
 package ru.netology.nmedia.activity
 
 import android.os.Bundle
-import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import ru.netology.nmedia.R
 import ru.netology.nmedia.adapter.OnInteractionListener
 import ru.netology.nmedia.adapter.PostsAdapter
 import ru.netology.nmedia.databinding.ActivityMainBinding
 import ru.netology.nmedia.dto.Post
-import ru.netology.nmedia.utils.AndroidUtils
-import ru.netology.nmedia.utils.AndroidUtils.focusAndShowKeyboard
 import ru.netology.nmedia.viewmodel.PostViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -21,6 +16,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val postViewModel: PostViewModel by viewModels()
+        val editPostLauncher = registerForActivityResult(EditPostContract) {
+            if (it == null) {
+                postViewModel.setEmptyPost()
+                return@registerForActivityResult
+            }
+            postViewModel.changeContentAndSave(it)
+            postViewModel.setEmptyPost()
+        }
+
         val adapter = PostsAdapter(object : OnInteractionListener {
             override fun onLike(post: Post) {
                 postViewModel.likeById(post.id)
@@ -37,10 +41,15 @@ class MainActivity : AppCompatActivity() {
             override fun onEdit(post: Post) {
                 postViewModel.edit(post)
             }
+
+            override fun onPlay(post: Post) {
+                startActivity(postViewModel.prepareVideoIntent(post))
+            }
         }
         )
 
         binding.list.adapter = adapter
+
         postViewModel.data.observe(this) { posts ->
             val newPost = posts.size > adapter.currentList.size
             adapter.submitList(posts) {
@@ -48,45 +57,15 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        binding.addNewPost.setOnClickListener {
+            editPostLauncher.launch(null)
+        }
+
         postViewModel.edited.observe(this) { post ->
             if (post.id == 0L) {
                 return@observe
             }
-            with(binding.content) {
-                setText(post.content)
-                binding.editGroup.visibility = View.VISIBLE
-                this.focusAndShowKeyboard()
-
-            }
-            binding.editText.text = post.content
+            editPostLauncher.launch(post.content)
         }
-
-        binding.save.setOnClickListener {
-            with(binding.content) {
-                if (text.isNullOrBlank()) {
-                    Toast.makeText(
-                        this@MainActivity,
-                        R.string.not_empty_content,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    return@setOnClickListener
-                }
-
-                postViewModel.changeContentAndSave(text.toString())
-                finishEditing(binding)
-            }
-        }
-        binding.editCancel.setOnClickListener {
-            postViewModel.setEmptyPost()
-            finishEditing(binding)
-        }
-    }
-    private fun finishEditing(binding: ActivityMainBinding) {
-        with(binding.content) {
-            setText("")
-            clearFocus()
-            AndroidUtils.hideKeyboard(this)
-        }
-        binding.editGroup.visibility = View.GONE
     }
 }
