@@ -62,12 +62,13 @@ class PostRepositoryFileImpl(
         )
     )
     private val data = MutableLiveData(posts)
+
     init {
         val file = context.filesDir.resolve(FILENAME)
         if (file.exists()) {
             context.openFileInput(FILENAME).bufferedReader().use {
                 posts = gson.fromJson(it, typeToken)
-                nextId = posts.maxOf { it.id } + 1
+                nextId = (posts.maxOfOrNull { it.id } ?: 0) + 1
             }
         } else {
             posts = defaultPosts
