@@ -1,5 +1,7 @@
 package ru.netology.nmedia.viewmodel
 
+import android.content.Intent
+import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.netology.nmedia.dto.Post
@@ -29,10 +31,21 @@ class PostViewModel : ViewModel() {
         }
         edited.value = empty
     }
+
     fun edit(post: Post) {
         edited.value = post
     }
+
     fun setEmptyPost() {
         edited.value = empty
+    }
+
+    fun prepareVideoIntent(post: Post): Intent {
+        val intent = Intent().apply {
+            action = Intent.ACTION_VIEW
+            type = "audio/*"
+            data = Uri.parse(post.urlVideo)
+        }
+        return Intent.createChooser(intent, "video")
     }
 }

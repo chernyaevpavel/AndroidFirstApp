@@ -32,7 +32,8 @@ class PostRepositoryInMemoryImpl : PostRepository {
             content = "Привет, это другой пост! Когда-то Нетология начиналась с интенсивов по онлайн-маркетингу. Затем появились курсы по дизайну, разработке, аналитике и управлению. Мы растём сами и помогаем расти студентам: от новичков до уверенных профессионалов. Но самое важное остаётся с нами: мы верим, что в каждом уже есть сила, которая заставляет хотеть больше, целиться выше, бежать быстрее. Наша миссия — помочь встать на путь роста и начать цепочку перемен → http://netolo.gy/fyb",
             published = "6 июня в 07:15",
             shareCount = 10847,
-            visibilityCount = 3
+            visibilityCount = 3,
+            urlVideo = "https://www.youtube.com/watch?v=XqZsoesa55w"
         ),
         Post(
             id = nextId++,
@@ -49,7 +50,8 @@ class PostRepositoryInMemoryImpl : PostRepository {
             published = "6 июня в 07:15",
             shareCount = 10847,
             likeCount = 999,
-            visibilityCount = 3
+            visibilityCount = 3,
+            urlVideo = "https://www.youtube.com/watch?v=6R9HOhG2CWU"
         )
     )
 

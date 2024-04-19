@@ -63,6 +63,32 @@
         app:barrierDirection="bottom"
         app:constraint_referenced_ids="avatar,published,menu" />
 
+    <ImageView
+        android:id="@+id/previewVideoImage"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/preview_video_height"
+        android:scaleType="centerCrop"
+        android:src="@drawable/cat"
+        app:layout_constraintTop_toBottomOf="@id/barrier" />
+
+    <ImageButton
+        android:id="@+id/playVideo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:src="@drawable/play_circle_filled_48"
+        app:layout_constraintBottom_toBottomOf="@id/previewVideoImage"
+        app:layout_constraintEnd_toEndOf="@id/previewVideoImage"
+        app:layout_constraintStart_toStartOf="@id/previewVideoImage"
+        app:layout_constraintTop_toTopOf="@id/previewVideoImage" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/videoGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="previewVideoImage,playVideo" />
+
     <TextView
         android:id="@+id/content"
         android:layout_width="0dp"
@@ -71,7 +97,7 @@
         android:autoLink="web"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/barrier"
+        app:layout_constraintTop_toBottomOf="@id/previewVideoImage"
         tools:text="@sample/posts.json/data/content" />
 
     <androidx.constraintlayout.widget.Barrier
