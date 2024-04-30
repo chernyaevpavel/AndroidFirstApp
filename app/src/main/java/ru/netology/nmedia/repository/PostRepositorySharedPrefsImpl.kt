@@ -1,22 +1,31 @@
 package ru.netology.nmedia.repository
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import ru.netology.nmedia.dto.Post
 import java.text.SimpleDateFormat
 import java.util.Date
 
-interface PostRepository {
-    fun getAll(): LiveData<List<Post>>
-    fun likeById(id: Long)
-    fun shareById(id: Long)
-    fun removeById(id: Long)
-    fun save(post: Post)
-}
+class PostRepositorySharedPrefsImpl(
+    context: Context
+) : PostRepository {
+    companion object {
+        private const val KEY = "posts"
+    }
 
-class PostRepositoryInMemoryImpl : PostRepository {
+    private val gson = Gson()
+    private val prefs = context.getSharedPreferences("prefs", Context.MODE_PRIVATE)
+    private val typeToken = TypeToken.getParameterized(List::class.java, Post::class.java).type
     private var nextId = 1L
-    private var posts = listOf(
+    private var posts = emptyList<Post>()
+        private set(value) {
+            field = value
+            sync()
+        }
+    private var defaultPosts = listOf(
         Post(
             id = nextId++,
             author = "Нетология. Университет интернет-профессий будущего",
@@ -53,8 +62,25 @@ class PostRepositoryInMemoryImpl : PostRepository {
             urlVideo = "https://www.youtube.com/watch?v=6R9HOhG2CWU"
         )
     )
-
     private val data = MutableLiveData(posts)
+
+    init {
+        prefs.getString(KEY, null)?.let {
+            posts = gson.fromJson(it, typeToken)
+            nextId = posts.maxOf { it.id } + 1
+        } ?: run {
+            posts = defaultPosts
+        }
+        data.value = posts
+    }
+
+    private fun sync() {
+        with(prefs.edit()) {
+            putString(KEY, gson.toJson(posts))
+            apply()
+        }
+    }
+
     override fun getAll(): LiveData<List<Post>> = data
 
     override fun likeById(id: Long) {
