@@ -42,10 +42,8 @@ class EditPostFragment : Fragment() {
 
         arguments?.textArg?.let {
             val content = it
-            if (it != null) {
-                binding.content.setText(content)
-                binding.editInfo.visibility = View.VISIBLE
-            }
+            binding.content.setText(content)
+            binding.editInfo.visibility = View.VISIBLE
         }
 
         return binding.root
