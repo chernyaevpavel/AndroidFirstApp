@@ -18,6 +18,7 @@ interface OnInteractionListener {
     fun onRemove(post: Post)
     fun onEdit(post: Post)
     fun onPlay(post: Post)
+    fun onOpenCardPost(post: Post)
 }
 
 class PostsAdapter(
@@ -89,6 +90,10 @@ class PostViewHolder(
                     }
                 }.show()
             }
+            content.setOnClickListener {
+                onInteractionListener.onOpenCardPost(post)
+            }
+
         }
     }
 }
