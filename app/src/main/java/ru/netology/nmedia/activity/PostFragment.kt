@@ -13,7 +13,6 @@ import ru.netology.nmedia.activity.EditPostFragment.Companion.textArg
 import ru.netology.nmedia.adapter.OnInteractionListener
 import ru.netology.nmedia.adapter.PostViewHolder
 import ru.netology.nmedia.databinding.CardPostBinding
-import ru.netology.nmedia.databinding.FragmentPostBinding
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.viewmodel.PostViewModel
 
@@ -32,11 +31,13 @@ class PostFragment : Fragment() {
             container,
             false
         )
-        postViewModel.data.observe(viewLifecycleOwner) { posts ->
-            val post = posts.find { it.id == arguments?.longArg }?:return@observe
-            val holder = PostViewHolder(binding, object : OnInteractionListener{
+
+        postViewModel.data.observe(viewLifecycleOwner) { model ->
+            val posts = model.posts
+            val post = posts.find { it.id == arguments?.longArg } ?: return@observe
+            val holder = PostViewHolder(binding, object : OnInteractionListener {
                 override fun onLike(post: Post) {
-                    postViewModel.likeById(post.id)
+                    postViewModel.likeById(post)
                 }
 
                 override fun onShare(post: Post) {

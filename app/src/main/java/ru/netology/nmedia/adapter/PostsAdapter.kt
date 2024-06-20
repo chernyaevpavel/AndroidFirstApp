@@ -51,7 +51,7 @@ class PostViewHolder(
             content.text = post.content
             like.isChecked = post.likedByMe
 
-            like.text = post.likeCount.getFormatedNumber()
+            like.text = post.likes.getFormatedNumber()
             share.text = post.shareCount.getFormatedNumber()
             visibility.text = post.visibilityCount.getFormatedNumber()
 
