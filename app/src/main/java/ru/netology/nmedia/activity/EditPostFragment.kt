@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -22,6 +23,14 @@ class EditPostFragment : Fragment() {
     private val postViewModel: PostViewModel by viewModels(
         ownerProducer = ::requireParentFragment
     )
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            postViewModel.setEmptyPost()
+            findNavController().navigateUp()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -45,7 +54,7 @@ class EditPostFragment : Fragment() {
             binding.content.setText(content)
             binding.editInfo.visibility = View.VISIBLE
         }
-
         return binding.root
     }
+
 }
