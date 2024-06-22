@@ -11,7 +11,6 @@ import ru.netology.nmedia.model.FeedModel
 import ru.netology.nmedia.repository.PostRepository
 import ru.netology.nmedia.repository.PostRepositoryRoomImpl
 import ru.netology.nmedia.utils.SingleLiveEvent
-import kotlin.concurrent.thread
 
 
 private val empty = Post(
@@ -19,11 +18,6 @@ private val empty = Post(
 )
 
 class PostViewModel(application: Application) : AndroidViewModel(application) {
-    //    private val repository: PostRepository = PostRepositorySharedPrefsImpl(application)
-    //    private val repository: PostRepository = PostRepositoryFileImpl(application)
-    //    private val repository: PostRepository = PostRepositorySQLiteImpl(
-    //        AppDb.getInstance(application).postDao
-    //    )
     private val repository: PostRepository = PostRepositoryRoomImpl()
     private val _data = MutableLiveData<FeedModel>()
     val data: LiveData<FeedModel>
@@ -38,54 +32,73 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun load() {
-        thread {
-            _data.postValue(FeedModel(loading = true))
-            _data.postValue(
-                try {
-                    val posts = repository.getAll()
-                    FeedModel(posts = posts, empty = posts.isEmpty())
-                } catch (e: Exception) {
-                    FeedModel(error = true)
+        _data.postValue(FeedModel(loading = true))
+        repository.getAll(
+            object : PostRepository.NMediaCallback<List<Post>> {
+                override fun onSuccess(data: List<Post>) {
+                    _data.postValue(FeedModel(posts = data, empty = data.isEmpty()))
                 }
-            )
-        }
+
+                override fun onError(e: Exception) {
+                    _data.postValue(FeedModel(error = true))
+                }
+            })
     }
 
+
     fun likeById(post: Post) {
-        thread {
-            val post = repository.likeById(post)
-            val model = _data.value ?: return@thread
-            _data.postValue(model.copy(posts = model.posts.map {
-                if (it.id == post.id) {
-                    post
-                } else {
-                    it
-                }
-            }))
-        }
+        repository.likeById(post, object : PostRepository.NMediaCallback<Post> {
+            override fun onSuccess(data: Post) {
+                val model = _data.value ?: return
+                _data.postValue(
+                    model.copy(posts = model.posts.map {
+                        if (it.id == data.id) {
+                            data
+                        } else {
+                            it
+                        }
+                    })
+                )
+            }
+
+            override fun onError(e: java.lang.Exception) {
+                _data.postValue(FeedModel(error = true))
+            }
+
+        })
     }
 
     fun shareById(id: Long) = repository.shareById(id)
     fun removeById(id: Long) {
-        thread {
-            repository.removeById(id)
-            //2 раза дергать сервер "такоесебе", но поскольку сервер немного "туповат"
-            // и всегда присылает 200 статус, даже на несуществующие посты,
-            // то это единственное решение корректно отобразить список постов
-            load()
-        }
+        repository.removeById(id, object : PostRepository.NMediaCallback<Unit> {
+            override fun onSuccess(data: Unit) {
+                load()
+            }
+
+            override fun onError(e: java.lang.Exception) {
+                _data.postValue(FeedModel(error = true))
+            }
+
+        })
     }
     fun changeContentAndSave(content: String) {
-        thread {
-            edited.value?.let {
-                val text = content.trim()
-                if (it.content != text.trim()) {
-                    repository.save(it.copy(content = text))
-                    _postCreated.postValue(Unit)
-                }
+        edited.value?.let {
+            val text = content.trim()
+            if (it.content != text.trim()) {
+                repository.save(
+                    it.copy(content = text),
+                    object : PostRepository.NMediaCallback<Post> {
+                        override fun onSuccess(data: Post) {
+                            this@PostViewModel._postCreated.postValue(Unit)
+                        }
+
+                        override fun onError(e: java.lang.Exception) {
+                            _data.postValue(FeedModel(error = true))
+                        }
+                    })
             }
-            edited.postValue(empty)
         }
+        edited.value = empty
     }
     fun edit(post: Post) {
         edited.value = post
