@@ -40,8 +40,6 @@ class EditPostFragment : Fragment() {
         )
         binding.save.setOnClickListener {
             postViewModel.changeContentAndSave(binding.content.text.toString())
-            postViewModel.setEmptyPost()
-            findNavController().navigateUp()
         }
 
         binding.cancel.setOnClickListener() {
@@ -53,6 +51,11 @@ class EditPostFragment : Fragment() {
             val content = it
             binding.content.setText(content)
             binding.editInfo.visibility = View.VISIBLE
+        }
+        postViewModel.postCreated.observe(viewLifecycleOwner) {
+            postViewModel.setEmptyPost()
+            findNavController().navigateUp()
+            postViewModel.load()
         }
         return binding.root
     }

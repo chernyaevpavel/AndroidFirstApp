@@ -12,4 +12,8 @@
     <string name="description_post_save">Save</string>
     <string name="not_empty_content">"Content can't be empty"</string>
     <string name="edit_message">Edit message</string>
+    <string name="response_body_null">Response body is null</string>
+    <string name="network_error">Network error</string>
+    <string name="retry">Retry</string>
+    <string name="there_is_no_posts">There is no posts</string>
 </resources>

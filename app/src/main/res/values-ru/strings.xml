@@ -13,4 +13,8 @@
     <string name="not_empty_content">Контент не может быть пустым</string>
     <string name="menu_edit">Редактировать</string>
     <string name="edit_message">Редактирование</string>
+    <string name="response_body_null">Пустой ответ сервера</string>
+    <string name="network_error">Ошибка сети</string>
+    <string name="retry">Повторить</string>
+    <string name="there_is_no_posts">Сообщений нет</string>
 </resources>
