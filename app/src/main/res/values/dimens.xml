@@ -9,4 +9,5 @@
     <dimen name="line_height">1dp</dimen>
     <dimen name="icon_padding">4dp</dimen>
     <dimen name="preview_video_height">240dp</dimen>
+    <integer name="rounded_corners">96</integer>
 </resources>

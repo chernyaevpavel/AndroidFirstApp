@@ -7,10 +7,14 @@ import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.extension.getFormatedNumber
+import ru.netology.nmedia.repository.PostRepositoryRoomImpl
 
 interface OnInteractionListener {
     fun onLike(post: Post)
@@ -39,6 +43,7 @@ class PostViewHolder(
     private val binding: CardPostBinding,
     private val onInteractionListener: OnInteractionListener
 ) : RecyclerView.ViewHolder(binding.root) {
+
     fun bind(post: Post) {
         binding.apply {
             author.text = post.author
@@ -54,6 +59,14 @@ class PostViewHolder(
             like.text = post.likes.getFormatedNumber()
             share.text = post.shareCount.getFormatedNumber()
             visibility.text = post.visibilityCount.getFormatedNumber()
+
+            Glide.with(binding.root)
+                .load("${PostRepositoryRoomImpl.BASE_URL}avatars/${post.authorAvatar}")
+                .placeholder(R.drawable.baseline_person_24)
+                .error(R.drawable.baseline_error_24)
+                .timeout(30_000)
+                .apply(RequestOptions.bitmapTransform(RoundedCorners(R.integer.rounded_corners)))
+                .into(avatar)
 
             like.setOnClickListener {
                 onInteractionListener.onLike(post)
