@@ -9,5 +9,6 @@ data class Post(
     val likes: Int = 0,
     val shareCount: Int = 0,
     val visibilityCount: Int = 0,
-    val urlVideo: String? = null
+    val urlVideo: String? = null,
+    val authorAvatar: String = ""
 )
