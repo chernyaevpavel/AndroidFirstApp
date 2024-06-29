@@ -17,4 +17,8 @@
     <string name="network_error">Ошибка сети</string>
     <string name="retry">Повторить</string>
     <string name="there_is_no_posts">Сообщений нет</string>
+    <string name="failed_refresh_news">Не удалось обновить ленту новостей</string>
+    <string name="faile_delete_post">Не удалось удалить пост</string>
+    <string name="body_is_null">Пустой ответ</string>
+    <string name="failed_save_post">Не удалось сохранить пост</string>
 </resources>
