@@ -16,4 +16,8 @@
     <string name="network_error">Network error</string>
     <string name="retry">Retry</string>
     <string name="there_is_no_posts">There is no posts</string>
+    <string name="failed_refresh_news">Filed to refresh news feed</string>
+    <string name="faile_delete_post">Failed to delete post</string>
+    <string name="body_is_null">body is null</string>
+    <string name="failed_save_post">Failed to save post</string>
 </resources>

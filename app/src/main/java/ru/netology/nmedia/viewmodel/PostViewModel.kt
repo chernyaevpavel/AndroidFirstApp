@@ -9,7 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.model.FeedModel
 import ru.netology.nmedia.repository.PostRepository
-import ru.netology.nmedia.repository.PostRepositoryRoomImpl
+import ru.netology.nmedia.repository.PostRepositoryApiImpl
 import ru.netology.nmedia.utils.SingleLiveEvent
 
 
@@ -18,13 +18,16 @@ private val empty = Post(
 )
 
 class PostViewModel(application: Application) : AndroidViewModel(application) {
-    private val repository: PostRepository = PostRepositoryRoomImpl()
+    private val repository: PostRepository = PostRepositoryApiImpl(application)
     private val _data = MutableLiveData<FeedModel>()
     val data: LiveData<FeedModel>
         get() = _data
     private val _postCreated = SingleLiveEvent<Unit>()
     val postCreated: LiveData<Unit>
         get() = _postCreated
+    private val _showError = SingleLiveEvent<String>()
+    val showError: LiveData<String>
+        get() = _showError
     val edited = MutableLiveData(empty)
 
     init {
@@ -40,6 +43,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                 }
 
                 override fun onError(e: Exception) {
+                    showError(e.message)
                     _data.postValue(FeedModel(error = true))
                 }
             })
@@ -76,7 +80,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             }
 
             override fun onError(e: java.lang.Exception) {
-                _data.postValue(FeedModel(error = true))
+                showError(e.message)
             }
 
         })
@@ -93,7 +97,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                         }
 
                         override fun onError(e: java.lang.Exception) {
-                            _data.postValue(FeedModel(error = true))
+                            showError(e.message)
                         }
                     })
             }
@@ -114,5 +118,11 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             data = Uri.parse(post.urlVideo)
         }
         return Intent.createChooser(intent, "video")
+    }
+
+    private fun showError(error: String?) {
+        error.let {
+            _showError.postValue(it)
+        }
     }
 }
