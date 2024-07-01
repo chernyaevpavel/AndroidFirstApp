@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -89,6 +90,15 @@ class FeedFragment : Fragment() {
         }
         binding.retry.setOnClickListener {
             postViewModel.load()
+        }
+
+        postViewModel.showError.observe(viewLifecycleOwner) { error ->
+            Toast.makeText(
+                context,
+                error,
+                Toast.LENGTH_SHORT
+            )
+                .show()
         }
 
         return binding.root

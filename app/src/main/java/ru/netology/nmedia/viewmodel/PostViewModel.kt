@@ -3,7 +3,6 @@ package ru.netology.nmedia.viewmodel
 import android.app.Application
 import android.content.Intent
 import android.net.Uri
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -26,6 +25,9 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     private val _postCreated = SingleLiveEvent<Unit>()
     val postCreated: LiveData<Unit>
         get() = _postCreated
+    private val _showError = SingleLiveEvent<String>()
+    val showError: LiveData<String>
+        get() = _showError
     val edited = MutableLiveData(empty)
 
     init {
@@ -119,11 +121,8 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private fun showError(error: String?) {
-        Toast.makeText(
-            getApplication(),
-            error,
-            Toast.LENGTH_SHORT
-        )
-            .show()
+        error.let {
+            _showError.postValue(it)
+        }
     }
 }
